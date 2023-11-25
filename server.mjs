@@ -36,6 +36,24 @@ server.post("/joke/", express.text(), function (request, respons, next) {
 
 })
 
+server.post("/jokes/", express.text(), function (request, respons, next) {
+
+    let jokes = request.body;
+
+    jokes = jokes.split("\n\n");
+
+    for (const joke of jokes) {
+        if (joke != "") {
+            data.push(joke);
+        }
+    }
+
+
+
+    respons.status(200).end();
+
+})
+
 
 function displayJoke(index = -1) {
     let jokeIndex = index;

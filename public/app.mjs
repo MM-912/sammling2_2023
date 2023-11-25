@@ -78,28 +78,34 @@ async function downloadJokes(e) {
 
 }
 
-function uploadJokes(e) {
+async function uploadJokes(e) {
 
     const file = e.target.files[0];
     console.log(file);
 
     let reader = new FileReader();
-    reader.onload = (e) => {
-        parseJokes(e.target.result);
+    reader.onload = async (e) => {
+        await parseJokes(e.target.result);
     }
     reader.readAsText(file, "UTF-8");
 }
 
-function parseJokes(raw) {
+async function parseJokes(raw) {
+    const options = {
+        method: "POST",
+        headers: {
+            "Content-Type": "text/plain",
+        },
+        body: raw,
+    };
 
-    let newJokes = raw.split("\n");
-    for (const joke of newJokes) {
-        if (joke != "") {
-            data.push(joke);
-        }
+    let respons = await fetch(ALL_JOKES_API_END_POINT, options);
+
+    if (respons.status === 200) {
+        getJoke();
+    } else {
+        alert("Kunne ikke laste opp vitsene " + respons.status);
     }
-
-    displayJoke();
 
 }
 
