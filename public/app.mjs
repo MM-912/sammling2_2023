@@ -9,6 +9,7 @@ addButton.onclick = saveNewJoke;
 download.onclick = downloadJokes;
 
 const JOKE_API_END_POINT = "/joke";
+const ALL_JOKES_API_END_POINT = "/jokes";
 
 async function saveNewJoke(e) {
     if (newJoke.value != "") {
@@ -24,7 +25,7 @@ async function saveNewJoke(e) {
         let result = await fetch(JOKE_API_END_POINT, options)
 
         if (result.status === 200) {
-            jokeContainer.innerText = newJoke;
+            jokeContainer.innerText = newJoke.value;
             newJoke.value = "";
         } else {
             alert("Kunne ikke lagre vits");
@@ -46,13 +47,25 @@ async function getJoke() {
     }
 }
 
-function downloadJokes(e) {
+async function downloadJokes(e) {
+
+    let raw = await fetch(ALL_JOKES_API_END_POINT);
+
+    if (raw.status != 200) {
+        alert("Kunne ikke laste vitser " + raw.status);
+        return;
+    }
+
+    let data = await raw.text();
+    data = data.split("\n");
 
     let a = document.createElement("a");
 
     let output = "";
     for (let i = 0; i < data.length; i++) {
-        output = output + data[i] + "\n\n";
+        if (data[i] != "") {
+            output = output + data[i] + "\n\n";
+        }
     }
 
 

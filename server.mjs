@@ -20,6 +20,12 @@ server.get("/joke/", function (request, respons, next) {
 
 });
 
+server.get("/jokes/", function (request, respons, next) {
+
+    respons.status(200).send(data.join("\n\n")).end();
+
+});
+
 
 
 server.post("/joke/", express.text(), function (request, respons, next) {
