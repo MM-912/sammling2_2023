@@ -18,7 +18,18 @@ server.get("/joke/", function (request, respons, next) {
     const joke = displayJoke();
     respons.status(200).send(joke).end();
 
+});
+
+
+
+server.post("/joke/", express.text(), function (request, respons, next) {
+
+    const joke = request.body;
+    data.push(joke);
+    respons.status(200).end();
+
 })
+
 
 function displayJoke(index = -1) {
     let jokeIndex = index;

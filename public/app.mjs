@@ -1,33 +1,49 @@
-
-
-
-displayJoke();
-
 const addButton = document.getElementById("addButton");
 const download = document.getElementById("download");
 const newJoke = document.getElementById("newJoke");
 const upload = document.getElementById("upload");
+const jokeContainer = document.getElementById("container");
 
 upload.onchange = uploadJokes;
+addButton.onclick = saveNewJoke;
+download.onclick = downloadJokes;
 
-addButton.onclick = function (e) {
-    if (newJoke.nodeValue != "") {
-        data.push(newJoke.value);
-        displayJoke(data.length - 1);
-        newJoke.value = "";
+const JOKE_API_END_POINT = "/joke";
+
+async function saveNewJoke(e) {
+    if (newJoke.value != "") {
+
+        const options = {
+            method: "POST",
+            headers: {
+                "Content-Type": "text/plain",
+            },
+            body: newJoke.value,
+        };
+
+        let result = await fetch(JOKE_API_END_POINT, options)
+
+        if (result.status === 200) {
+            jokeContainer.innerText = newJoke;
+            newJoke.value = "";
+        } else {
+            alert("Kunne ikke lagre vits");
+        }
+
     }
 }
 
-download.onclick = downloadJokes;
 
-function displayJoke(index = -1) {
-    let jokeIndex = index;
-    if (jokeIndex < 0) {
-        jokeIndex = Math.floor(Math.random() * (data.length - 0 + 1) + 0);
+
+async function getJoke() {
+
+    let raw = await fetch(JOKE_API_END_POINT);
+    if (raw.status >= 200 && raw.status < 400) {
+        let joke = await raw.text();
+        if (joke) {
+            jokeContainer.innerText = joke;
+        }
     }
-    const joke = data[jokeIndex];
-
-    document.getElementById("container").innerText = joke;
 }
 
 function downloadJokes(e) {
@@ -74,3 +90,4 @@ function parseJokes(raw) {
 
 }
 
+await getJoke();
