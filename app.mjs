@@ -1,5 +1,5 @@
 
-const data = ["Har du hørt om han som ikke likte kaffe? – Han syntes ikke det var noe å trakte etter…", "Vet du hva moren til Pinocchio var? – Trebarnsmor…", "Man kan si mye rart om Sveits, men en ting er i hvert fall sikkert. – Flagget er et stort pluss…"];
+
 
 displayJoke();
 
